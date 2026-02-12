@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import KPICard from '../widgets/KPICard.svelte';
 	import TimeSeriesChart from '../widgets/TimeSeriesChart.svelte';
 	import FunnelWidget from '../widgets/FunnelWidget.svelte';
@@ -18,7 +17,7 @@
 	const eventStream = generateMockEventStream();
 	const segmentData = generateMockSegmentData();
 
-	let primaryChartsRefs: HTMLElement[] = [];
+	let primaryChartsRefs = $state<HTMLElement[]>([]);
 </script>
 
 <div class="warboard p-lg space-y-lg">

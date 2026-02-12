@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { SvelteMap } from 'svelte/reactivity';
 
 export const DataStatusSchema = z.enum(['idle', 'loading', 'success', 'error', 'stale']);
 export type DataStatus = z.infer<typeof DataStatusSchema>;
@@ -14,7 +15,7 @@ export const DataSourceSchema = z.object({
 export type DataSource = z.infer<typeof DataSourceSchema>;
 
 class DataState {
-	sources = $state<Map<string, DataSource>>(new Map());
+	sources = $state<SvelteMap<string, DataSource>>(new SvelteMap());
 	globalStatus = $derived.by(() => {
 		const statuses = Array.from(this.sources.values()).map(s => s.status);
 		if (statuses.some(s => s === 'error')) return 'error';

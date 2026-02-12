@@ -1,16 +1,20 @@
 <script lang="ts">
+	import { SvelteSet } from 'svelte/reactivity';
 	import type { TimeSeriesData } from '$lib/data/mock-data';
 	
 	let { data, title }: { data: TimeSeriesData[]; title: string } = $props();
 
-	let visibleSeries = $state<Set<string>>(new Set());
-	
+	let visibleSeries = new SvelteSet<string>();
+
 	$effect(() => {
-		visibleSeries = new Set(data.map(s => s.id));
+		visibleSeries.clear();
+		for (const s of data) {
+			visibleSeries.add(s.id);
+		}
 	});
 
-	function getViewBox(data: TimeSeriesData[]): string {
-		const allValues = data.flatMap(series => series.data.map(d => d.value));
+	function getViewBox(seriesData: TimeSeriesData[]): string {
+		const allValues = seriesData.flatMap(series => series.data.map(d => d.value));
 		const minValue = Math.min(...allValues);
 		const maxValue = Math.max(...allValues);
 		return `0 ${minValue * 0.9} 100 ${(maxValue - minValue) * 1.2}`;
@@ -31,7 +35,6 @@
 		} else {
 			visibleSeries.add(id);
 		}
-		visibleSeries = new Set(visibleSeries);
 	}
 </script>
 

@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	
 	let { onClose }: { onClose: () => void } = $props();
 
 	let searchQuery = $state('');
 	let selectedIndex = $state(0);
+	let inputRef = $state<HTMLInputElement | null>(null);
 
 	const commands = [
 		{ id: 'jump-revenue', label: 'Jump to Revenue Widget', category: 'Navigation', shortcut: '⌘1' },
@@ -24,7 +23,11 @@
 			: commands
 	);
 
-	onMount(() => {
+	$effect(() => {
+		inputRef?.focus();
+	});
+
+	$effect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if (e.key === 'Escape') {
 				onClose();
@@ -65,6 +68,7 @@
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
 				</svg>
 				<input
+					bind:this={inputRef}
 					type="text"
 					class="flex-1 bg-transparent border-none outline-none text-body-lg text-institutional-text-primary placeholder-institutional-text-tertiary"
 					placeholder="Search commands..."

@@ -1,13 +1,10 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import DashboardShell from '$lib/components/DashboardShell.svelte';
-	import { dashboardState } from '$lib/state/dashboard-state.svelte';
 	import { alertState } from '$lib/state/alert-state.svelte';
 	import { dataState } from '$lib/state/data-state.svelte';
-	import { generateMockKPIs, generateMockTimeSeries, generateMockEventStream } from '$lib/data/mock-data';
 	import type { Alert } from '$lib/state/alert-state.svelte';
 
-	onMount(() => {
+	$effect(() => {
 		dataState.registerSource({
 			id: 'main-api',
 			name: 'Main API',

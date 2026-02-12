@@ -1,26 +1,18 @@
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
 	import type { EventData } from '$lib/data/mock-data';
-	import { animateLiveFeedItem } from '$lib/motion/widget-transitions';
 	
 	let { data, title }: { data: EventData[]; title: string } = $props();
 
 	let events = $state<EventData[]>([]);
-	
-	$effect(() => {
-		events = data.slice(0, 10);
-	});
-	
-	let itemRefs: HTMLElement[] = [];
 
-	const severityColors = {
+	const severityColors: Record<string, string> = {
 		info: 'border-institutional-accent-info',
 		warn: 'border-institutional-accent-warning',
 		high: 'border-institutional-accent-danger',
 		critical: 'border-institutional-accent-danger'
 	};
 
-	const severityBg = {
+	const severityBg: Record<string, string> = {
 		info: 'bg-institutional-accent-info',
 		warn: 'bg-institutional-accent-warning',
 		high: 'bg-institutional-accent-danger',
@@ -37,7 +29,9 @@
 		return `${hours}h ago`;
 	}
 
-	onMount(() => {
+	$effect(() => {
+		events = data.slice(0, 10);
+
 		const interval = setInterval(() => {
 			if (events.length < data.length) {
 				const nextEvent = data[events.length];
