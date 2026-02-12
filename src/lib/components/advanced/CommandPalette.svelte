@@ -27,30 +27,27 @@
 		inputRef?.focus();
 	});
 
-	$effect(() => {
-		const handleKeyDown = (e: KeyboardEvent) => {
-			if (e.key === 'Escape') {
+	function handleKeyDown(e: KeyboardEvent) {
+		if (e.key === 'Escape') {
+			onClose();
+		} else if (e.key === 'ArrowDown') {
+			e.preventDefault();
+			selectedIndex = Math.min(selectedIndex + 1, filteredCommands.length - 1);
+		} else if (e.key === 'ArrowUp') {
+			e.preventDefault();
+			selectedIndex = Math.max(selectedIndex - 1, 0);
+		} else if (e.key === 'Enter') {
+			e.preventDefault();
+			const command = filteredCommands[selectedIndex];
+			if (command) {
+				console.log('Executing:', command.id);
 				onClose();
-			} else if (e.key === 'ArrowDown') {
-				e.preventDefault();
-				selectedIndex = Math.min(selectedIndex + 1, filteredCommands.length - 1);
-			} else if (e.key === 'ArrowUp') {
-				e.preventDefault();
-				selectedIndex = Math.max(selectedIndex - 1, 0);
-			} else if (e.key === 'Enter') {
-				e.preventDefault();
-				const command = filteredCommands[selectedIndex];
-				if (command) {
-					console.log('Executing:', command.id);
-					onClose();
-				}
 			}
-		};
-
-		window.addEventListener('keydown', handleKeyDown);
-		return () => window.removeEventListener('keydown', handleKeyDown);
-	});
+		}
+	}
 </script>
+
+<svelte:window onkeydown={handleKeyDown} />
 
 <div
 	role="dialog"

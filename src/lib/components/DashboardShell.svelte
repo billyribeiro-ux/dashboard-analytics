@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import IntelligenceBar from './shell/IntelligenceBar.svelte';
 	import StrategicNav from './shell/StrategicNav.svelte';
 	import Warboard from './shell/Warboard.svelte';
@@ -11,7 +12,14 @@
 	let kpiRowRef = $state<HTMLElement | null>(null);
 	let showCommandPalette = $state(false);
 
-	$effect(() => {
+	function handleKeyDown(e: KeyboardEvent) {
+		if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+			e.preventDefault();
+			showCommandPalette = !showCommandPalette;
+		}
+	}
+
+	onMount(() => {
 		const orchestrator = new DashboardOrchestrator();
 
 		const timeout = setTimeout(() => {
@@ -22,22 +30,14 @@
 			});
 		}, 100);
 
-		const handleKeyDown = (e: KeyboardEvent) => {
-			if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-				e.preventDefault();
-				showCommandPalette = !showCommandPalette;
-			}
-		};
-
-		window.addEventListener('keydown', handleKeyDown);
-
 		return () => {
 			clearTimeout(timeout);
-			window.removeEventListener('keydown', handleKeyDown);
 			orchestrator.kill();
 		};
 	});
 </script>
+
+<svelte:window onkeydown={handleKeyDown} />
 
 <div 
 	bind:this={shellRef}

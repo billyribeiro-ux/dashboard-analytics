@@ -45,30 +45,78 @@
 
 	<div bind:this={kpiRowRef} class="kpi-row grid grid-cols-4 gap-md">
 		{#each kpis as kpi}
-			<KPICard data={kpi} />
+			<svelte:boundary>
+				<KPICard data={kpi} />
+				{#snippet failed(error, reset)}
+					<div class="widget-error p-md text-body-sm text-institutional-accent-danger">
+						<p>Widget failed to render</p>
+						<button class="text-institutional-accent-primary text-label-sm mt-xs" onclick={reset}>Retry</button>
+					</div>
+				{/snippet}
+			</svelte:boundary>
 		{/each}
 	</div>
 
 	<div class="primary-charts grid grid-cols-2 gap-md">
 		<div bind:this={primaryChartsRefs[0]} class="chart-container">
-			<TimeSeriesChart data={timeSeries} title="Revenue Trend" />
+			<svelte:boundary>
+				<TimeSeriesChart data={timeSeries} title="Revenue Trend" />
+				{#snippet failed(error, reset)}
+					<div class="widget-error p-lg text-body-sm text-institutional-accent-danger">
+						<p>Chart failed to render</p>
+						<button class="text-institutional-accent-primary text-label-sm mt-xs" onclick={reset}>Retry</button>
+					</div>
+				{/snippet}
+			</svelte:boundary>
 		</div>
 		<div bind:this={primaryChartsRefs[1]} class="chart-container">
-			<FunnelWidget data={funnelData} title="Conversion Funnel" />
+			<svelte:boundary>
+				<FunnelWidget data={funnelData} title="Conversion Funnel" />
+				{#snippet failed(error, reset)}
+					<div class="widget-error p-lg text-body-sm text-institutional-accent-danger">
+						<p>Chart failed to render</p>
+						<button class="text-institutional-accent-primary text-label-sm mt-xs" onclick={reset}>Retry</button>
+					</div>
+				{/snippet}
+			</svelte:boundary>
 		</div>
 	</div>
 
 	<div class="secondary-panels grid grid-cols-3 gap-md">
 		<div class="panel-container col-span-2">
-			<CohortHeatmap data={cohortData} title="Retention Cohorts" />
+			<svelte:boundary>
+				<CohortHeatmap data={cohortData} title="Retention Cohorts" />
+				{#snippet failed(error, reset)}
+					<div class="widget-error p-lg text-body-sm text-institutional-accent-danger">
+						<p>Panel failed to render</p>
+						<button class="text-institutional-accent-primary text-label-sm mt-xs" onclick={reset}>Retry</button>
+					</div>
+				{/snippet}
+			</svelte:boundary>
 		</div>
 		<div class="panel-container">
-			<LiveEventTape data={eventStream} title="Live Events" />
+			<svelte:boundary>
+				<LiveEventTape data={eventStream} title="Live Events" />
+				{#snippet failed(error, reset)}
+					<div class="widget-error p-lg text-body-sm text-institutional-accent-danger">
+						<p>Panel failed to render</p>
+						<button class="text-institutional-accent-primary text-label-sm mt-xs" onclick={reset}>Retry</button>
+					</div>
+				{/snippet}
+			</svelte:boundary>
 		</div>
 	</div>
 
 	<div class="tertiary-section">
-		<SegmentMatrix data={segmentData} title="Segment Performance" />
+		<svelte:boundary>
+			<SegmentMatrix data={segmentData} title="Segment Performance" />
+			{#snippet failed(error, reset)}
+				<div class="widget-error p-lg text-body-sm text-institutional-accent-danger">
+					<p>Table failed to render</p>
+					<button class="text-institutional-accent-primary text-label-sm mt-xs" onclick={reset}>Retry</button>
+				</div>
+			{/snippet}
+		</svelte:boundary>
 	</div>
 </div>
 

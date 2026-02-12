@@ -1,19 +1,13 @@
 <script lang="ts">
 	import '../app.css';
+	import { MediaQuery } from 'svelte/reactivity';
 
 	let { children } = $props();
 
+	const reducedMotion = new MediaQuery('prefers-reduced-motion: reduce', false);
+
 	$effect(() => {
-		const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-		function update(matches: boolean) {
-			document.documentElement.toggleAttribute('data-reduced-motion', matches);
-		}
-
-		update(mq.matches);
-		const handler = (e: MediaQueryListEvent) => update(e.matches);
-		mq.addEventListener('change', handler);
-		return () => mq.removeEventListener('change', handler);
+		document.documentElement.toggleAttribute('data-reduced-motion', reducedMotion.current);
 	});
 </script>
 
